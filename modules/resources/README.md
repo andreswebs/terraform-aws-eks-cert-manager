@@ -1,17 +1,16 @@
-# terraform-aws-eks-cert-manager
+# terraform-aws-eks-cert-manager iam
 
 [//]: # (BEGIN_TF_DOCS)
-Deploys [cert-manager](https://cert-manager.io) on AWS EKS.
+Deploys the cert-manager Helm cbart
 
 ## Usage
 
 Example:
 
 ```hcl
-module "cert_manager" {
-  source                     = "github.com/andreswebs/terraform-aws-eks-cert-manager"
-  cluster_oidc_provider      = var.eks_cluster_oidc_provider
-  iam_role_name              = "cert-manager-${var.eks_cluster_id}"
+module "cert_manager_resources" {
+  source                     = "github.com/andreswebs/terraform-aws-eks-cert-manager//modules/resources"
+  iam_role_arn               = var.cert_manager_iam_role_arn
   chart_version_cert_manager = var.chart_version_cert_manager
 }
 ```
@@ -23,7 +22,6 @@ module "cert_manager" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_chart_version_cert_manager"></a> [chart\_version\_cert\_manager](#input\_chart\_version\_cert\_manager) | Chart version | `string` | `null` | no |
-| <a name="input_cluster_oidc_provider"></a> [cluster\_oidc\_provider](#input\_cluster\_oidc\_provider) | OpenID Connect (OIDC) Identity Provider associated with the Kubernetes cluster | `string` | n/a | yes |
 | <a name="input_helm_atomic_creation"></a> [helm\_atomic\_creation](#input\_helm\_atomic\_creation) | Purge resources on installation failure ? The wait flag will be set automatically if atomic is used | `bool` | `true` | no |
 | <a name="input_helm_cleanup_on_fail"></a> [helm\_cleanup\_on\_fail](#input\_helm\_cleanup\_on\_fail) | Deletion new resources created in this upgrade if the upgrade fails ? | `bool` | `true` | no |
 | <a name="input_helm_create_namespace"></a> [helm\_create\_namespace](#input\_helm\_create\_namespace) | Create the namespace if it does not yet exist ? | `bool` | `true` | no |
@@ -41,16 +39,13 @@ module "cert_manager" {
 | <a name="input_helm_verify"></a> [helm\_verify](#input\_helm\_verify) | Verify the package before installing it. Helm uses a provenance file to verify the integrity of the chart | `bool` | `false` | no |
 | <a name="input_helm_wait_for_completion"></a> [helm\_wait\_for\_completion](#input\_helm\_wait\_for\_completion) | Wait until all resources are in a ready state before marking the release as successful ? | `bool` | `true` | no |
 | <a name="input_helm_wait_for_jobs"></a> [helm\_wait\_for\_jobs](#input\_helm\_wait\_for\_jobs) | Wait until all Jobs have been completed before marking the release as successful ? | `bool` | `true` | no |
-| <a name="input_iam_role_name"></a> [iam\_role\_name](#input\_iam\_role\_name) | Name of the IAM role used by the cert-manager Kubernetes service account | `string` | `"cert-manager"` | no |
-| <a name="input_k8s_namespace"></a> [k8s\_namespace](#input\_k8s\_namespace) | Kubernetes namespace on which to install resources | `string` | `"cert-manager"` | no |
+| <a name="input_iam_role_arn"></a> [iam\_role\_arn](#input\_iam\_role\_arn) | IAM role ARN used by the cert-manager Kubernetes service account | `string` | n/a | yes |
+| <a name="input_k8s_namespace"></a> [k8s\_namespace](#input\_k8s\_namespace) | Name of the Kubernetes namespace for cert-manager | `string` | `"cert-manager"` | no |
 | <a name="input_k8s_sa_name"></a> [k8s\_sa\_name](#input\_k8s\_sa\_name) | Name of the Kubernetes service account for cert-manager | `string` | `"cert-manager"` | no |
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_iam"></a> [iam](#module\_iam) | ./modules/iam | n/a |
-| <a name="module_resources"></a> [resources](#module\_resources) | ./modules/resources | n/a |
+No modules.
 
 ## Outputs
 
@@ -58,11 +53,12 @@ module "cert_manager" {
 |------|-------------|
 | <a name="output_namespace"></a> [namespace](#output\_namespace) | The name (`metadata.name`) of the Kubernetes namespace |
 | <a name="output_release"></a> [release](#output\_release) | Helm release |
-| <a name="output_role"></a> [role](#output\_role) | IAM role for the Kubernetes service account |
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_helm"></a> [helm](#provider\_helm) | >= 2.2.0 |
 
 ## Requirements
 
@@ -74,14 +70,8 @@ No providers.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [helm_release.cert_manager](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 
 [//]: # (END_TF_DOCS)
-
-## Authors
-
-**Andre Silva** - [@andreswebs](https://github.com/andreswebs)
-
-## License
-
-This project is licensed under the [Unlicense](UNLICENSE.md).
