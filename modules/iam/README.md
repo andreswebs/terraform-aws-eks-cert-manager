@@ -1,7 +1,7 @@
 # terraform-aws-eks-cert-manager iam
 
 [//]: # (BEGIN_TF_DOCS)
-
+Deploys IAM resources for cert-manager
 
 ## Usage
 
