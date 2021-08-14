@@ -23,14 +23,14 @@ module "assume_role_policy" {
   k8s_sa_namespace      = var.k8s_namespace
 }
 
-resource "aws_iam_role" "cert_manager" {
+resource "aws_iam_role" "this" {
   name                  = local.iam_role_name
   assume_role_policy    = module.assume_role_policy.json
   force_detach_policies = true
 }
 
-resource "aws_iam_role_policy" "cert_manager_permissions" {
+resource "aws_iam_role_policy" "this" {
   name   = "cert-manager-permissions"
-  role   = aws_iam_role.cert_manager.id
+  role   = aws_iam_role.this.id
   policy = file("${path.module}/policies/cert-manager-permissions.json")
 }
