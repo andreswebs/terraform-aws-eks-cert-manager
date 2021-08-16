@@ -1,4 +1,4 @@
-# terraform-aws-eks-cert-manager iam
+# terraform-aws-eks-cert-manager resources
 
 [//]: # (BEGIN_TF_DOCS)
 Deploys the cert-manager Helm cbart
